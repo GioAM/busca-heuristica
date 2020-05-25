@@ -1,15 +1,14 @@
 import math
-from main import TAMANHO
+from matriz import TAMANHO
 
 
 class Mapa():
     def __init__(self, matriz):
-        x, y = TAMANHO
         self.mapa = []
-        for i in range(x):
+        for i in range(TAMANHO):
             self.mapa.append([])
             coordenada = Coordenada(0, 0)
-            for j in range(y):
+            for j in range(TAMANHO):
                 if matriz[i][j] == "G":
                     coordenada = Coordenada(i, j, 'G', 10)
                 elif matriz[i][j] == "A":
@@ -23,24 +22,25 @@ class Mapa():
                 self.mapa[i].append(coordenada)
 
     def reiniciar_mapa(self):
-        x, y = TAMANHO
-        for i in range(x):
-            for j in range(y):
+        for i in range(TAMANHO):
+            for j in range(TAMANHO):
                 self.mapa[i][j].F = math.inf
                 self.mapa[i][j].G = math.inf
 
     def mostrar_mapa(self):
-        x, y = TAMANHO
-        for i in range(x):
-            for j in range(y):
-                print(self.mapa[i][j], end=" ")
+        print("")
+        print("Mapa - Visão Terrenos")
+        for i in range(TAMANHO):
+            for j in range(TAMANHO):
+                print(self.mapa[i][j].tipo, end=" ")
             print('')
         print("")
 
     def mostrar_parede(self):
-        x, y = TAMANHO
-        for i in range(x):
-            for j in range(y):
+        print("")
+        print("Mapa - Visão Paredes")
+        for i in range(TAMANHO):
+            for j in range(TAMANHO):
                 if self.mapa[i][j].peso > 0:
                     print(".", end=" ")
                 else:
@@ -49,17 +49,19 @@ class Mapa():
         print("")
 
     def mostrar_mapa_G(self):
-        x, y = TAMANHO
-        for i in range(x):
-            for j in range(y):
+        print("")
+        print("Mapa - Visão G")
+        for i in range(TAMANHO):
+            for j in range(TAMANHO):
                 print(self.mapa[i][j].G, end=" ")
             print('')
         print("")
 
     def mostrar_mapa_F(self):
-        x, y = TAMANHO
-        for i in range(x):
-            for j in range(y):
+        print("")
+        print("Mapa - Visão F")
+        for i in range(TAMANHO):
+            for j in range(TAMANHO):
                 print(self.mapa[i][j].F, end=" ")
             print('')
         print("")
@@ -74,8 +76,8 @@ class Coordenada():
         self.F = math.inf
         self.G = math.inf
 
-    def __str__(self):
-        return self.tipo
+    def __repr__(self):
+        return "(%s,%s)"%(self.x, self.y)
 
     def __lt__(self, other):
         if self.x < other.x:
@@ -83,6 +85,10 @@ class Coordenada():
         elif self.x > other.x:
             return False
         return self.y <= other.y
+
+    def atribuir_valores(self, F, G):
+        self.F = F
+        self.G = G
 
     def valido(self):
         if self.tipo == "E":
@@ -97,6 +103,9 @@ class Pessoa():
         self.casa_x = casa_x
         self.casa_y = casa_y
         self.ajuda = ajuda
+
+    def __str__(self):
+        return "(%s,%s)"%(self.x, self.y)
 
 
 class Agente():
