@@ -5,10 +5,10 @@ from matriz import TAMANHO
 class Mapa():
     def __init__(self, matriz):
         self.mapa = []
-        for i in range(TAMANHO):
+        for i in range(0, TAMANHO):
             self.mapa.append([])
             coordenada = Coordenada(0, 0)
-            for j in range(TAMANHO):
+            for j in range(0, TAMANHO):
                 if matriz[i][j] == "G":
                     coordenada = Coordenada(i, j, '.', 10)
                 elif matriz[i][j] == "A":
@@ -34,6 +34,7 @@ class Mapa():
             self.mapa[revenda.x][revenda.y].tipo = "R"
         for pessoa in pessoas.queue:
             self.mapa[pessoa[1].x][pessoa[1].y].tipo = "P"
+            self.mapa[pessoa[1].casa_x][pessoa[1].casa_y].tipo = "C"
         self.mapa[agente.x][agente.y].tipo = "A"
 
 
@@ -65,13 +66,15 @@ class Mapa():
 
 
 class Coordenada():
-    def __init__(self, x, y, tipo=".", peso=0):
+    def __init__(self, x, y, tipo=".", peso=0, veio_de_y=0):
         self.x = x
         self.y = y
         self.tipo = tipo
         self.peso = peso
         self.F = math.inf
         self.G = math.inf
+        self.veio_de_x = 0
+        self.veio_de_y = 0
 
     def __repr__(self):
         return "(%s,%s)"%(self.x, self.y)
@@ -117,7 +120,7 @@ class Agente():
         self.x = x
         self.y = y
         self.sucesso = sucesso
-        mapa.mapa[x][y].tipo = "A"
+        mapa.mapa[self.x][self.y].tipo = "A"
 
 class Revenda():
     def __init__(self, x, y):

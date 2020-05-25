@@ -34,6 +34,9 @@ def sortear_pessoas(mapa):
             continue
         if not mapa.mapa[casa_x][casa_y].valido() or not mapa.mapa[casa_x][casa_y].tipo == ".":
             continue
+        if casa_x == x or casa_y == y:
+            continue
+        mapa.mapa[casa_x][casa_y].tipo = "C"
         mapa.mapa[x][y].tipo = "P"
         pessoa = Pessoa(x, y, casa_x, casa_y)
         pessoas.put((random() * 100, pessoa))
@@ -51,6 +54,7 @@ def sortear_pessoas(mapa):
         if not mapa.mapa[casa_x][casa_y].valido() or not mapa.mapa[casa_x][casa_y].tipo == ".":
             continue
         mapa.mapa[x][y].tipo = "P"
+        mapa.mapa[casa_x][casa_y].tipo = "C"
         pessoa = Pessoa(x, y, casa_x, casa_y, False)
         pessoas.put((int(random() * 100), pessoa))
         numero_de_pessoas += 1
@@ -114,11 +118,25 @@ def busca_heuristica(mapa, origem, destino):
             #("Visitando (%s,%s)" % (vizinho.x, vizinho.y))
 
             if custo_atual < mapa.mapa[vizinho.x][vizinho.y].G:
+                mapa.mapa[vizinho.x][vizinho.y].veio_de_x = atual.x
+                mapa.mapa[vizinho.x][vizinho.y].veio_de_y = atual.y
                 mapa.mapa[vizinho.x][vizinho.y].G = custo_atual
                 mapa.mapa[vizinho.x][vizinho.y].F = custo_atual + heuristica(vizinho, destino)
                 fronteira.put((mapa.mapa[vizinho.x][vizinho.y].F, mapa.mapa[vizinho.x][vizinho.y]))
-
+    reconstruir_caminho(origem, destino, mapa)
     return destino.G
+
+
+def reconstruir_caminho(origem, destino, mapa):
+    atual = destino
+    d_tipo = destino.tipo
+    while atual.x != origem.x or atual.y != origem.y:
+        mapa.mapa[atual.x][atual.y].tipo = "|"
+        veio_de_x = mapa.mapa[atual.x][atual.y].veio_de_x
+        veio_de_y = mapa.mapa[atual.x][atual.y].veio_de_y
+        atual = mapa.mapa[veio_de_x][veio_de_y]
+    mapa.mapa[origem.x][origem.y].tipo = "A"
+    mapa.mapa[destino.x][destino.y].tipo = d_tipo
 
 
 def vizinhos(atual, mapa):
