@@ -11,8 +11,9 @@ def sortear_revendas(mapa):
     while numero_de_revendas < 3:
         x = int(random() * TAMANHO)
         y = int(random() * TAMANHO)
-        if not mapa.mapa[x][y].valido():
+        if not mapa.mapa[x][y].valido() or not mapa.mapa[x][y].tipo == ".":
             continue
+        mapa.mapa[x][y].tipo = "R"
         revenda = Revenda(x, y)
         revendas.append(revenda)
         numero_de_revendas += 1
@@ -29,10 +30,11 @@ def sortear_pessoas(mapa):
         y = int(random() * TAMANHO)
         casa_x = int(random() * TAMANHO)
         casa_y = int(random() * TAMANHO)
-        if not mapa.mapa[x][y].valido():
+        if not mapa.mapa[x][y].valido() or not mapa.mapa[x][y].tipo == ".":
             continue
-        if not mapa.mapa[casa_x][casa_y].valido():
+        if not mapa.mapa[casa_x][casa_y].valido() or not mapa.mapa[casa_x][casa_y].tipo == ".":
             continue
+        mapa.mapa[x][y].tipo = "P"
         pessoa = Pessoa(x, y, casa_x, casa_y)
         pessoas.put((random() * 100, pessoa))
         numero_de_pessoas += 1
@@ -44,10 +46,11 @@ def sortear_pessoas(mapa):
         y = int(random() * TAMANHO)
         casa_x = int(random() * TAMANHO)
         casa_y = int(random() * TAMANHO)
-        if not mapa.mapa[x][y].valido():
+        if not mapa.mapa[x][y].valido() or not mapa.mapa[x][y].tipo == ".":
             continue
-        if not mapa.mapa[casa_x][casa_y].valido():
+        if not mapa.mapa[casa_x][casa_y].valido() or not mapa.mapa[casa_x][casa_y].tipo == ".":
             continue
+        mapa.mapa[x][y].tipo = "P"
         pessoa = Pessoa(x, y, casa_x, casa_y, False)
         pessoas.put((int(random() * 100), pessoa))
         numero_de_pessoas += 1
@@ -63,7 +66,7 @@ def buscar_alcool_gel(mapa, agente, revendas):
     agente.x = revenda.x
     agente.y = revenda.y
     print("O Agente está na localização(%d,%d) pegando alcool gel" % (agente.x, agente.y))
-    mapa.reiniciar_mapa()
+    mapa.mostrar_mapa()
     print("")
 
 
@@ -76,7 +79,7 @@ def encontrar_pessoa(mapa, agente, pessoa):
     agente.y = pessoa.y
     agente.sucesso = pessoa.ajuda
     print("O Agente está na localização(%d,%d) com uma pessoa" % (agente.x, agente.y))
-    mapa.reiniciar_mapa()
+    mapa.mostrar_mapa()
     print("")
 
 
@@ -88,7 +91,7 @@ def levar_para_casa(mapa, agente, pessoa):
     agente.x = pessoa.casa_x
     agente.y = pessoa.casa_y
     print("O Agente levou uma pessoa para casa e está na localização(%d,%d)" % (agente.x, agente.y))
-    mapa.reiniciar_mapa()
+    mapa.mostrar_mapa()
     print("")
 
 

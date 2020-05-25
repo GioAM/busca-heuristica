@@ -10,41 +10,38 @@ class Mapa():
             coordenada = Coordenada(0, 0)
             for j in range(TAMANHO):
                 if matriz[i][j] == "G":
-                    coordenada = Coordenada(i, j, 'G', 10)
+                    coordenada = Coordenada(i, j, '.', 10)
                 elif matriz[i][j] == "A":
-                    coordenada = Coordenada(i, j, 'A', 1)
+                    coordenada = Coordenada(i, j, '.', 1)
                 elif matriz[i][j] == "P":
-                    coordenada = Coordenada(i, j, 'P', 3)
+                    coordenada = Coordenada(i, j, '.', 3)
                 elif matriz[i][j] == "T":
-                    coordenada = Coordenada(i, j, 'T', 6)
+                    coordenada = Coordenada(i, j, '.', 6)
                 elif matriz[i][j] == "E":
-                    coordenada = Coordenada(i, j, 'E', -1)
+                    coordenada = Coordenada(i, j, '#', -1)
                 self.mapa[i].append(coordenada)
 
-    def reiniciar_mapa(self):
+    def reiniciar_mapa(self, agente, revendas, pessoas):
         for i in range(TAMANHO):
             for j in range(TAMANHO):
                 self.mapa[i][j].F = math.inf
                 self.mapa[i][j].G = math.inf
+                if self.mapa[i][j].tipo == "#":
+                    self.mapa[i][j].tipo = "#"
+                else:
+                    self.mapa[i][j].tipo = "."
+        for revenda in revendas:
+            self.mapa[revenda.x][revenda.y].tipo = "R"
+        for pessoa in pessoas.queue:
+            self.mapa[pessoa[1].x][pessoa[1].y].tipo = "P"
+        self.mapa[agente.x][agente.y].tipo = "A"
+
 
     def mostrar_mapa(self):
-        print("")
         print("Mapa - Visão Terrenos")
         for i in range(TAMANHO):
             for j in range(TAMANHO):
                 print(self.mapa[i][j].tipo, end=" ")
-            print('')
-        print("")
-
-    def mostrar_parede(self):
-        print("")
-        print("Mapa - Visão Paredes")
-        for i in range(TAMANHO):
-            for j in range(TAMANHO):
-                if self.mapa[i][j].peso > 0:
-                    print(".", end=" ")
-                else:
-                    print("#", end=" ")
             print('')
         print("")
 
@@ -68,7 +65,7 @@ class Mapa():
 
 
 class Coordenada():
-    def __init__(self, x, y, tipo="*", peso=0):
+    def __init__(self, x, y, tipo=".", peso=0):
         self.x = x
         self.y = y
         self.tipo = tipo
@@ -91,7 +88,7 @@ class Coordenada():
         self.G = G
 
     def valido(self):
-        if self.tipo == "E":
+        if self.tipo == "#":
             return False
         return True
 
@@ -107,13 +104,20 @@ class Pessoa():
     def __str__(self):
         return "(%s,%s)"%(self.x, self.y)
 
+    def __lt__(self, other):
+        if self.x < other.x:
+            return True
+        elif self.x > other.x:
+            return False
+        return self.y <= other.y
+
 
 class Agente():
-    def __init__(self, x, y, sucesso=False):
+    def __init__(self, x, y, mapa, sucesso=False):
         self.x = x
         self.y = y
         self.sucesso = sucesso
-
+        mapa.mapa[x][y].tipo = "A"
 
 class Revenda():
     def __init__(self, x, y):
