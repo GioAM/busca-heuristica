@@ -94,7 +94,7 @@ def levar_para_casa(mapa, agente, pessoa):
     print("Custo da operação : %s" % (busca_heuristica(mapa, origem, destino)))
     agente.x = pessoa.casa_x
     agente.y = pessoa.casa_y
-    print("O Agente levou uma pessoa para casa e está na localização(%d,%d)" % (agente.x, agente.y))
+    print('\33[1:30:42m' + "O Agente levou uma pessoa para casa e está na localização(%d,%d)" % (agente.x, agente.y) + '\33[0:0m')
     mapa.mostrar_mapa()
     print("")
 

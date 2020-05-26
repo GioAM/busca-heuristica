@@ -1,9 +1,9 @@
 import math
 from matriz import TAMANHO
 
-
 class Mapa():
-    def __init__(self, matriz):
+    def __init__(self, matriz, exibir_cores=False):
+        self.exibir_cores = exibir_cores
         self.mapa = []
         for i in range(0, TAMANHO):
             self.mapa.append([])
@@ -39,10 +39,31 @@ class Mapa():
 
 
     def mostrar_mapa(self):
+        if self.exibir_cores:
+            cores = {
+            ".": '\33[1:30:40m',
+            "#": '\33[1:31:41m',
+            "P": '\33[1:33:43m',
+            "A": '\33[1:34:44m',
+            "R": '\33[1:35:45m',
+            "C": '\33[1:36:46m',
+            "|": '\33[1:32:42m',
+            }
+        else:
+            cores = {
+                ".": '',
+                "#": '',
+                "P": '',
+                "A": '',
+                "R": '',
+                "C": '',
+                "|": '',
+            }
         print("Mapa - Visão Terrenos")
         for i in range(TAMANHO):
             for j in range(TAMANHO):
-                print(self.mapa[i][j].tipo, end=" ")
+                print(cores[self.mapa[i][j].tipo] + self.mapa[i][j].tipo , end=" ")
+                print('\33[0:0m', end="")
             print('')
         print("")
 

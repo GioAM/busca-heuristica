@@ -32,4 +32,4 @@ while pessoas_ajudadas < 3:
         mapa.reiniciar_mapa(agente, revendas, pessoas)
         pessoas_ajudadas += 1
     else:
-        print("Pessoa não quer ser levada para casa")
+        print('\33[1:30:41m'+"Pessoa não quer ser levada para casa" + '\33[0:0m')
